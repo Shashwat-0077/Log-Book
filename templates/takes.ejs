@@ -1,0 +1,39 @@
+<% layout('./layouts/boilerplate.ejs') %>
+
+<link rel="stylesheet" href="css/paysAndTakes.css" />
+
+<fieldset>
+    <legend>Takes</legend>
+    <% if(debtors.length == 0) { %>
+    <h1>No Records Found!</h1>
+    <% } else {%>
+    <div class="tab-group">
+        <% for(let debtor of debtors) {%>
+        <div class="tab" id="<%- creditor._id%>">
+            <div class="title">
+                <h2><%- debtor.name %></h2>
+                <div>: <span><%- debtor.total %> </span></div>
+            </div>
+            <div class="content">
+                <table>
+                    <tbody>
+                        <% for(let item of debtor.items) {%>
+                        <tr id="<%- item._id%>">
+                            <td><%- item.name %></td>
+                            <td><%- item.price %></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <% } %>
+    </div>
+    <% } %>
+</fieldset>
+
+<script>
+    const page = "takes";
+</script>
+<script src="../JS/animate.js"></script>
+<script src="../JS/paysAndTakes.js"></script>

@@ -1,0 +1,25 @@
+<% layout('./layouts/boilerplate.ejs') %>
+<link rel="stylesheet" href="css/home.css" type="text/css" />
+
+<main>
+    <h1>My Log</h1>
+    <section class="selection-menu">
+        <a href="/pays">Pays (Total : <%- credTotal %> )</a>
+        <a href="/takes">Takes (Total : <%- debtTotal %> )</a>
+        <form action="/details" class="person" method="get">
+            <input
+                type="text"
+                name="name"
+                id="name"
+                placeholder="Name"
+                list="names"
+            />
+            <datalist id="names">
+                <% for(name of names ) { %>
+                <option value="<%- name %>"><%- name %></option>
+                <% } %>
+            </datalist>
+            <button>Submit</button>
+        </form>
+    </section>
+</main>

@@ -1,0 +1,14 @@
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+:root {
+    --first: #ffffff;
+    --second: #9381ff;
+    --third: #ffa62b;
+    --fourth: #6a3937;
+    --fifth: #02111b;
+    --font: "Lobster Two", cursive;
+}
