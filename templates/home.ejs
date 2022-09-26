@@ -6,20 +6,45 @@
     <section class="selection-menu">
         <a href="/pays">Pays (Total : <%- credTotal %> )</a>
         <a href="/takes">Takes (Total : <%- debtTotal %> )</a>
-        <form action="/details" class="person" method="get">
+        <form action="/details" class="person" method="get" autocomplete="off">
             <input
                 type="text"
                 name="name"
                 id="name"
                 placeholder="Name"
                 list="names"
+                autocomplete="off"
             />
-            <datalist id="names">
-                <% for(name of names ) { %>
-                <option value="<%- name %>"><%- name %></option>
+            <div class="suggestions">
+                <% for(let name of names) { %>
+                <p><%- name %></p>
+                <hr />
                 <% } %>
-            </datalist>
+            </div>
             <button>Submit</button>
         </form>
     </section>
 </main>
+
+<script>
+    let nameInp = document.getElementById("name");
+    const names = "<%- names%>".split(",");
+    const suggestions = document.querySelector(".suggestions");
+
+    function escapeRegex(text) {
+        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    }
+
+    nameInp.addEventListener("input", (e) => {
+        let regex = new RegExp(escapeRegex(nameInp.value), "gi");
+
+        let innerHtml = "";
+        for (let name of names) {
+            if (name.match(regex)) {
+                innerHtml += `<p>${name}</p><hr>`;
+            }
+        }
+
+        suggestions.innerHTML = innerHtml;
+    });
+</script>

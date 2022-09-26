@@ -13,7 +13,6 @@ body {
 main {
     border: 2px solid rgba(0, 0, 0, 0.2);
     border-radius: 1em;
-    overflow: hidden;
     padding: 3em;
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -54,6 +53,7 @@ main h1 {
 }
 
 .selection-menu form {
+    position: relative;
     width: 100%;
     display: flex;
     gap: 2%;
@@ -79,4 +79,44 @@ main h1 {
     border: 0;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     z-index: 2;
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    transform: translateY(-1em);
+    overflow-y: auto;
+    margin: 0.3em 0.5em 0;
+    width: 70%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 0.5em;
+    background-color: white;
+    max-height: 0;
+    transition: max-height 500ms, transform 500ms;
+}
+
+.selection-menu form input:focus + .suggestions {
+    max-height: 150px;
+    transform: translateY(0);
+}
+
+.suggestions p {
+    width: 100%;
+    padding: 1em;
+    margin: 0 auto;
+}
+
+.suggestions hr {
+    width: 90%;
+    background-color: lightgray;
+    border: 1px solid lightgray;
+    margin: 0 auto;
+}
+
+.suggestions hr:last-of-type {
+    display: none;
+}
+
+.suggestions p:hover {
+    background-color: lightgray;
 }

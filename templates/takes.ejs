@@ -9,7 +9,7 @@
     <% } else {%>
     <div class="tab-group">
         <% for(let debtor of debtors) {%>
-        <div class="tab" id="<%- creditor._id%>">
+        <div class="tab" id="<%- debtor._id%>">
             <div class="title">
                 <h2><%- debtor.name %></h2>
                 <div>: <span><%- debtor.total %> </span></div>
