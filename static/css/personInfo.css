@@ -1,0 +1,175 @@
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+:root {
+    --first: #ffffff;
+    --second: #9381ff;
+    --third: #ffa62b;
+    --fourth: #6a3937;
+    --fifth: #02111b;
+    --font: "Lobster Two", cursive;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("/images/main-background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    min-height: 100vh;
+    padding-top: 3em;
+}
+
+fieldset {
+    width: 80%;
+    margin: auto;
+    gap: 2%;
+    border: 3px solid var(--second);
+    border-radius: 1em;
+    min-height: 150px;
+    padding: 1%;
+}
+
+fieldset legend {
+    font-size: 4rem;
+    font-family: var(--font);
+    margin-left: 1em;
+    text-transform: capitalize;
+}
+
+.content {
+    width: 100%;
+    font-size: 1.3rem;
+    border-radius: 20px;
+}
+
+.content tr {
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
+
+.content tr:nth-of-type(odd) {
+    background-color: lightgrey;
+}
+
+.content td:first-of-type {
+    text-transform: capitalize;
+}
+
+.content td:nth-of-type(2) {
+    text-align: right;
+}
+
+.content td:last-of-type {
+    text-align: right;
+}
+
+.pays,
+.takes {
+    border-radius: 2rem;
+    padding: 1.5em;
+    background-color: white;
+    margin: 1em 0;
+}
+
+.pays h1,
+.takes h1 {
+    font-family: var(--font);
+    font-size: 3em;
+    font-weight: 400;
+    margin: 0 0 0.5em 0;
+}
+
+hr {
+    width: 99%;
+    background-color: black;
+    border: 1px solid black;
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.2em;
+    font-size: 25px;
+}
+
+.total p {
+    font-family: var(--font);
+    font-weight: 400;
+    margin: 0;
+}
+
+.grand-total {
+    display: flex;
+    justify-content: space-between;
+}
+
+.grand-total p {
+    font-family: var(--font);
+    font-weight: 200;
+    font-size: 3.5em;
+    margin: 0.5em 0;
+    padding: 0 0.2em;
+}
+
+/* ------------------------ */
+
+.content .details {
+    width: 50%;
+    margin: 0 0 0.3em;
+}
+
+.content .action {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    padding: 0;
+    max-height: 0;
+    transition: max-height 250ms linear;
+}
+
+.content .action.active {
+    max-height: 28.6px;
+}
+
+.content .action button {
+    border: 0;
+    color: white;
+    border-radius: 0.4em;
+    padding: 0.5em 1em;
+}
+
+.action button:first-of-type {
+    background-color: #0d6efd;
+    margin-right: 0.4em;
+}
+
+.action button:last-of-type {
+    background-color: #dc3545;
+}
+
+/* -----------------Media--------------------- */
+
+@media (max-width: 450px) {
+    fieldset legend {
+        margin: auto;
+    }
+
+    .action {
+        justify-content: space-between;
+    }
+
+    .action button:first-of-type {
+        margin: 0;
+    }
+}

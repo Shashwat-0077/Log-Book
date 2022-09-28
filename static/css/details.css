@@ -95,17 +95,16 @@ fieldset h1 {
     border-top: 0;
     border-radius: 0 0 20px 20px;
     transform: translateY(-7px);
-    padding: 0.2em;
+    padding: 0.3em;
     overflow: hidden;
     transition: max-height 500ms, padding 500ms, opacity 500ms;
+    z-index: -100;
 }
 
 .tab.active .content {
-    max-height: 400px;
-    /* gotta fix this  */
-
     opacity: 1;
     padding-top: 0.5em;
+    max-height: 400px;
 }
 
 .tab .content table {
@@ -122,8 +121,13 @@ fieldset h1 {
     opacity: 1;
 }
 
+.tab .content table tbody {
+    overflow: hidden;
+}
+
 .tab .content table tr {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding: 0.5em;
     border-radius: 0.5em;
@@ -137,6 +141,56 @@ fieldset h1 {
     text-transform: capitalize;
 }
 
-.tab .content table td:last-of-type {
+.tab .content table td:nth-of-type(2) {
     text-align: right;
+}
+
+.tab .content table .details {
+    width: 50%;
+    margin: 0 0 0.3em;
+}
+
+.tab .content table .action {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    padding: 0;
+    max-height: 0;
+    transition: max-height 250ms linear;
+}
+
+.tab .content table .action.active {
+    max-height: 28.6px;
+}
+
+.tab .content table .action button {
+    border: 0;
+    color: white;
+    border-radius: 0.4em;
+    padding: 0.5em 1em;
+}
+
+.action button:first-of-type {
+    background-color: #0d6efd;
+    margin-right: 0.4em;
+}
+
+.action button:last-of-type {
+    background-color: #dc3545;
+}
+
+/* -----------------Media--------------------- */
+
+@media (max-width: 450px) {
+    fieldset legend {
+        margin: auto;
+    }
+
+    .action {
+        justify-content: space-between;
+    }
+
+    .action button:first-of-type {
+        margin: 0;
+    }
 }

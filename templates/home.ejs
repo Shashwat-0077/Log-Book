@@ -6,7 +6,7 @@
     <section class="selection-menu">
         <a href="/pays">Pays (Total : <%- credTotal %> )</a>
         <a href="/takes">Takes (Total : <%- debtTotal %> )</a>
-        <form action="/details" class="person" method="get" autocomplete="off">
+        <form action="/person" class="person" method="get" autocomplete="off">
             <input
                 type="text"
                 name="name"
@@ -15,10 +15,15 @@
                 list="names"
                 autocomplete="off"
             />
+
+            <!-- change the suggestion list style 
+            reference : https://codepen.io/Coding-Artist/pen/dyZXPOZ -->
+
             <div class="suggestions">
                 <% for(let name of names) { %>
-                <p><%- name %></p>
-                <hr />
+                <div class="suggestion">
+                    <p data-value="<%- name %>"><%- name %></p>
+                </div>
                 <% } %>
             </div>
             <button>Submit</button>
@@ -27,9 +32,23 @@
 </main>
 
 <script>
+    function setEvent() {
+        let suggestions = Array.from(
+            document.querySelectorAll(".suggestion p")
+        );
+        suggestions.forEach((suggestion) => {
+            suggestion.addEventListener("click", (e) => {
+                console.log(suggestion.dataset.value);
+                nameInp.value = suggestion.dataset.value;
+            });
+        });
+    }
+
+    setEvent();
+
     let nameInp = document.getElementById("name");
     const names = "<%- names%>".split(",");
-    const suggestions = document.querySelector(".suggestions");
+    const suggestionsDiv = document.querySelector(".suggestions");
 
     function escapeRegex(text) {
         return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -41,10 +60,12 @@
         let innerHtml = "";
         for (let name of names) {
             if (name.match(regex)) {
-                innerHtml += `<p>${name}</p><hr>`;
+                innerHtml += `<div class="suggestion"><p data-value="${name}">${name}</p></div>`;
             }
         }
 
-        suggestions.innerHTML = innerHtml;
+        suggestionsDiv.innerHTML = innerHtml;
+
+        setEvent();
     });
 </script>

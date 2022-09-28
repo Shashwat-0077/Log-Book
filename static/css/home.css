@@ -68,20 +68,23 @@ main h1 {
     border-radius: 0.4em;
     border: 2.1px solid var(--second);
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    padding: 0.5em 0.2em;
+    padding: 0.5em 0.4em;
     z-index: 2;
 }
 
 .selection-menu form button {
     width: 25%;
+    font-size: 1.5em;
     background-color: var(--second);
     border-radius: 0.4em;
     border: 0;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     z-index: 2;
+    color: white;
 }
 
 .suggestions {
+    user-select: none;
     position: absolute;
     top: 100%;
     transform: translateY(-1em);
@@ -95,28 +98,26 @@ main h1 {
     transition: max-height 500ms, transform 500ms;
 }
 
+.suggestion {
+    overflow: hidden;
+}
+
 .selection-menu form input:focus + .suggestions {
-    max-height: 150px;
+    max-height: 170px;
     transform: translateY(0);
 }
 
 .suggestions p {
-    width: 100%;
+    width: 90%;
     padding: 1em;
     margin: 0 auto;
+    cursor: pointer;
 }
 
-.suggestions hr {
-    width: 90%;
-    background-color: lightgray;
-    border: 1px solid lightgray;
-    margin: 0 auto;
+.suggestions p {
+    border-bottom: 1px solid lightgray;
 }
 
-.suggestions hr:last-of-type {
-    display: none;
-}
-
-.suggestions p:hover {
+.suggestions div:hover {
     background-color: lightgray;
 }

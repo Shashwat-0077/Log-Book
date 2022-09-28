@@ -1,0 +1,58 @@
+<% layout("./layouts/boilerplate.ejs") %>
+
+<link rel="stylesheet" href="css/personInfo.css" />
+
+<fieldset>
+    <legend><%- name %></legend>
+
+    <div class="pays">
+        <h1>Pay</h1>
+        <table class="content">
+            <% for(let item of pay.items) {%>
+            <tr id="<%- item._id%>">
+                <td class="details"><%- item.name %></td>
+                <td class="details"><%- item.price %></td>
+                <td class="action">
+                    <button>Edit</button>
+                    <button>Delete</button>
+                </td>
+            </tr>
+            <% } %>
+        </table>
+        <hr />
+        <div class="total">
+            <p>Total</p>
+            <p>: <%- pay.total %></p>
+        </div>
+    </div>
+    <div class="takes">
+        <h1>Take</h1>
+        <table class="content">
+            <% for(let item of take.items) {%>
+            <tr id="<%- item._id%>">
+                <td class="details"><%- item.name %></td>
+                <td class="details"><%- item.price %></td>
+                <td class="action">
+                    <button>Edit</button>
+                    <button>Delete</button>
+                </td>
+            </tr>
+            <% } %>
+        </table>
+        <hr />
+        <div class="total">
+            <p>Total</p>
+            <p>: <%- take.total %></p>
+        </div>
+    </div>
+
+    <div class="grand-total">
+        <p>Grand Total (<%- pay.total > take.total ? 'Pay' : 'Take' %>)</p>
+        <p>
+            : <%- pay.total > take.total ? pay.total - take.total : take.total -
+            pay.total %>
+        </p>
+    </div>
+</fieldset>
+
+<script src="/js/personInfo.js"></script>

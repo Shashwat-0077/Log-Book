@@ -59,18 +59,50 @@ app.get("/", async (req, res, next) => {
     });
 });
 
-app.get("/details", (req, res, next) => {
+app.get("/person", async (req, res, next) => {
     let name = req.query.name;
+
+    const pay = await Creditor.find({ name: name }).populate({
+        path: "items",
+        options: {
+            sort: { price: "asc" },
+        },
+    });
+
+    const take = await Debtor.find({ name: name }).populate({
+        path: "items",
+        options: {
+            sort: { price: "asc" },
+        },
+    });
+
+    res.render("personInfo", { pay: pay[0], take: take[0], name: name });
 });
 
 app.get("/pays", async (req, res, next) => {
-    const creditors = await Creditor.find().populate("items");
-    res.render("pays", { creditors: creditors });
+    const creditors = await Creditor.find()
+        .populate({
+            path: "items",
+            options: {
+                sort: { price: "asc" },
+            },
+        })
+        .sort({ total: "desc" });
+
+    res.render("details", { people: creditors, title: "Pay" });
 });
 
 app.get("/takes", async (req, res, next) => {
-    const debtors = await Debtor.find().populate("items");
-    res.render("takes", { debtors: debtors });
+    const debtors = await Debtor.find()
+        .populate({
+            path: "items",
+            options: {
+                sort: { price: "asc" },
+            },
+        })
+        .sort({ total: "desc" });
+
+    res.render("details", { people: debtors, title: "Take" });
 });
 
 app.listen(8080, () => {

@@ -1,0 +1,46 @@
+<% layout('./layouts/boilerplate.ejs') %>
+
+<link rel="stylesheet" href="css/details.css" />
+
+<fieldset>
+    <legend><%- title %></legend>
+    <% if(people.length == 0) { %>
+    <h1>No Records Found!</h1>
+    <% } else {%>
+    <div class="tab-group">
+        <% for(let person of people) {%>
+        <div class="tab" id="<%- person._id%>">
+            <div class="title">
+                <h2><%- person.name %></h2>
+                <div>: <span><%- person.total %> </span></div>
+            </div>
+            <div class="content">
+                <table>
+                    <tbody>
+                        <% for(let item of person.items) {%>
+                        <tr id="<%- item._id%>">
+                            <td class="details"><%- item.name %></td>
+                            <td class="details"><%- item.price %></td>
+                            <td class="action">
+                                <button>Edit</button>
+                                <button>Delete</button>
+                            </td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <% } %>
+    </div>
+    <% } %>
+</fieldset>
+
+<script>
+    let content = Array.from(document.querySelectorAll(".content"));
+
+    let heights = content.map((cont) =>
+        parseFloat(window.getComputedStyle(cont).height)
+    );
+</script>
+<script src="../JS/animate.js"></script>
