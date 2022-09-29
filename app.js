@@ -106,5 +106,5 @@ app.get("/takes", async (req, res, next) => {
 });
 
 app.listen(8080, () => {
-    console.log("Meet you at 8080");
+    console.log("Meet you at 5050");
 });

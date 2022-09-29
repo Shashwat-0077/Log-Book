@@ -2,7 +2,13 @@
 <link rel="stylesheet" href="css/home.css" type="text/css" />
 
 <main>
-    <h1>My Log</h1>
+    <h1>
+        My Balance <br />
+        <span>
+            (<%- credTotal > debtTotal ? 'Pay' : 'Take' %> : <%- credTotal >
+            debtTotal ? credTotal - debtTotal : debtTotal - credTotal %>)
+        </span>
+    </h1>
     <section class="selection-menu">
         <a href="/pays">Pays (Total : <%- credTotal %> )</a>
         <a href="/takes">Takes (Total : <%- debtTotal %> )</a>
@@ -12,60 +18,17 @@
                 name="name"
                 id="name"
                 placeholder="Name"
-                list="names"
                 autocomplete="off"
             />
+            <span class="suggestion"></span>
+            <!-- reference : https://codepen.io/Coding-Artist/pen/dyZXPOZ  -->
 
-            <!-- change the suggestion list style 
-            reference : https://codepen.io/Coding-Artist/pen/dyZXPOZ -->
-
-            <div class="suggestions">
-                <% for(let name of names) { %>
-                <div class="suggestion">
-                    <p data-value="<%- name %>"><%- name %></p>
-                </div>
-                <% } %>
-            </div>
             <button>Submit</button>
         </form>
     </section>
 </main>
 
 <script>
-    function setEvent() {
-        let suggestions = Array.from(
-            document.querySelectorAll(".suggestion p")
-        );
-        suggestions.forEach((suggestion) => {
-            suggestion.addEventListener("click", (e) => {
-                console.log(suggestion.dataset.value);
-                nameInp.value = suggestion.dataset.value;
-            });
-        });
-    }
-
-    setEvent();
-
-    let nameInp = document.getElementById("name");
     const names = "<%- names%>".split(",");
-    const suggestionsDiv = document.querySelector(".suggestions");
-
-    function escapeRegex(text) {
-        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-    }
-
-    nameInp.addEventListener("input", (e) => {
-        let regex = new RegExp(escapeRegex(nameInp.value), "gi");
-
-        let innerHtml = "";
-        for (let name of names) {
-            if (name.match(regex)) {
-                innerHtml += `<div class="suggestion"><p data-value="${name}">${name}</p></div>`;
-            }
-        }
-
-        suggestionsDiv.innerHTML = innerHtml;
-
-        setEvent();
-    });
 </script>
+<script src="/js/home.js"></script>

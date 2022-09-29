@@ -29,14 +29,14 @@ fieldset {
     width: 80%;
     margin: auto;
     gap: 2%;
-    border: 3px solid var(--second);
+    border: 0.4em solid var(--second);
     border-radius: 1em;
     min-height: 150px;
     padding: 1%;
 }
 
 fieldset legend {
-    font-size: 4rem;
+    font-size: 4em;
     font-family: var(--font);
     margin-left: 1em;
     text-transform: capitalize;
@@ -44,8 +44,8 @@ fieldset legend {
 
 .content {
     width: 100%;
-    font-size: 1.3rem;
-    border-radius: 20px;
+    font-size: 1.3em;
+    border-radius: 1.5em;
 }
 
 .content tr {
@@ -75,7 +75,7 @@ fieldset legend {
 
 .pays,
 .takes {
-    border-radius: 2rem;
+    border-radius: 2em;
     padding: 1.5em;
     background-color: white;
     margin: 1em 0;
@@ -100,7 +100,7 @@ hr {
     justify-content: space-between;
     align-items: center;
     padding: 0 0.2em;
-    font-size: 25px;
+    font-size: 1.5em;
 }
 
 .total p {
@@ -139,14 +139,15 @@ hr {
 }
 
 .content .action.active {
-    max-height: 28.6px;
+    max-height: 2em;
 }
 
 .content .action button {
     border: 0;
     color: white;
+    font-size: inherit;
     border-radius: 0.4em;
-    padding: 0.5em 1em;
+    padding: 0.4em 1em;
 }
 
 .action button:first-of-type {
@@ -161,6 +162,15 @@ hr {
 /* -----------------Media--------------------- */
 
 @media (max-width: 450px) {
+    body {
+        font-size: 0.7em;
+    }
+
+    fieldset {
+        width: 95%;
+        margin-bottom: 1em;
+    }
+
     fieldset legend {
         margin: auto;
     }
@@ -171,5 +181,9 @@ hr {
 
     .action button:first-of-type {
         margin: 0;
+    }
+
+    .grand-total p {
+        font-size: 2.5em;
     }
 }
