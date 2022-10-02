@@ -1,0 +1,17 @@
+<% layout("./layouts/boilerplate.ejs") %>
+
+<link rel="stylesheet" href="/css/allNames.css" />
+
+<div class="main">
+    <h1>Cannot find that name!</h1>
+
+    <% for(let name of names) { %>
+
+    <div class="row">
+        <p><%- name %></p>
+        <i class="fa-solid fa-chevron-right"></i>
+    </div>
+    <% } %>
+</div>
+
+<script src="/js/allNames.js"></script>

@@ -3,7 +3,6 @@ const delBtn = Array.from(document.querySelectorAll(".deleteBtn"));
 const cancelBtn = document.querySelector(".cancel");
 const editForm = document.querySelector(".edit-form");
 const form = editForm.querySelector("form");
-const personName = document.querySelector("legend");
 const [itemName, price] = Array.from(editForm.querySelectorAll("input"));
 
 function exitEditScreen() {
@@ -31,15 +30,15 @@ form.addEventListener("click", (event) => {
 editBtn.forEach((button) => {
     button.addEventListener("click", (event) => {
         editForm.classList.add("active");
-        let item = button.closest("tr");
-        let parent = item.closest(".content");
+        let parentRow = button.closest("tr");
+        let parent = parentRow.closest(".tab");
 
-        itemName.value = item.querySelector(".name").innerHTML;
-        price.value = item.querySelector(".price").innerHTML;
+        itemName.value = parentRow.querySelector(".name").innerHTML;
+        price.value = parentRow.querySelector(".price").innerHTML;
 
         form.setAttribute(
             "action",
-            `/person/${parent.dataset.path}/edit/${parent.dataset.id}/${item.id}`
+            `${location.href}/edit/${parent.id}/${parentRow.id}`
         );
 
         event.stopPropagation();

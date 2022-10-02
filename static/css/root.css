@@ -2,6 +2,13 @@
 ::after,
 ::before {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 :root {
@@ -11,4 +18,14 @@
     --fourth: #6a3937;
     --fifth: #02111b;
     --font: "Lobster Two", cursive;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("/images/main-background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
 }

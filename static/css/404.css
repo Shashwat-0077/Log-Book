@@ -1,0 +1,14 @@
+body {
+    min-height: 100vh;
+    display: grid;
+    place-content: center;
+    background-image: url("/images/main-background.jpg");
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+img {
+    border-radius: 3em;
+}

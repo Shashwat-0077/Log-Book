@@ -4,24 +4,11 @@
     box-sizing: border-box;
 }
 
-:root {
-    --first: #ffffff;
-    --second: #9381ff;
-    --third: #ffa62b;
-    --fourth: #6a3937;
-    --fifth: #02111b;
-    --font: "Lobster Two", cursive;
+body {
+    min-height: 100vh;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    background-image: url("/images/main-background.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center center;
-    min-height: 100vh;
+.main {
     padding-top: 3em;
 }
 
@@ -148,6 +135,8 @@ hr {
     font-size: inherit;
     border-radius: 0.4em;
     padding: 0.4em 1em;
+    cursor: pointer;
+    font-size: 0.8em;
 }
 
 .action button:first-of-type {
@@ -159,7 +148,95 @@ hr {
     background-color: #dc3545;
 }
 
+/* ------------------Edit form---------------- */
+
+.edit-form {
+    position: fixed;
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    backdrop-filter: blur(0px);
+    z-index: -1;
+    transition: backdrop-filter 500ms, background-color 500ms,
+        z-index 500ms step-end;
+    background-color: transparent;
+}
+
+.edit-form.active {
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+    transition: backdrop-filter 500ms, background-color 500ms, z-index 0ms;
+}
+
+.edit-form form {
+    width: 30%;
+    background-color: white;
+    height: 0%;
+    padding: 2em;
+    border-radius: 0 0 1.5em 1.5em;
+    box-shadow: rgba(0, 0, 0, 0.35) 0em 0.15em 0.5em;
+    font-size: 1.5em;
+    transform: translateY(-105%);
+    transition: transform 500ms;
+}
+
+.edit-form.active form {
+    transform: translateY(0);
+}
+
+.edit-form form label {
+    display: block;
+}
+
+.edit-form form input {
+    padding: 0.7em;
+    outline: 0;
+    border: 0.2em solid var(--second);
+    border-radius: 0.3em;
+    margin-bottom: 1em;
+    margin-top: 0.3em;
+    font-size: 0.7em;
+}
+
+.edit-form form label,
+.edit-form form input {
+    font-family: var(--font);
+    width: 100%;
+}
+
+.buttons {
+    margin-top: 0.2em;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+
+.buttons button {
+    cursor: pointer;
+    font-size: 0.7em;
+    padding: 0.7em 1.4em;
+    color: white;
+    border: 0;
+    border-radius: 0.5em;
+}
+
+.cancel {
+    background-color: #dc3545;
+}
+
+.submit {
+    background-color: #198754;
+}
+
 /* -----------------Media--------------------- */
+
+@media (max-width: 1100px) {
+    .edit-form form {
+        width: 65%;
+    }
+}
 
 @media (max-width: 450px) {
     body {
@@ -185,5 +262,9 @@ hr {
 
     .grand-total p {
         font-size: 2.5em;
+    }
+
+    .edit-form form {
+        width: 95%;
     }
 }

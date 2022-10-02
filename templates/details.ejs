@@ -2,45 +2,61 @@
 
 <link rel="stylesheet" href="css/details.css" />
 
-<fieldset>
-    <legend><%- title %></legend>
-    <% if(people.length == 0) { %>
-    <h1>No Records Found!</h1>
-    <% } else {%>
-    <div class="tab-group">
-        <% for(let person of people) {%>
-        <div class="tab" id="<%- person._id%>">
-            <div class="title">
-                <h2><%- person.name %></h2>
-                <div>: <span><%- person.total %> </span></div>
+<div class="edit-form">
+    <form action="" method="POST">
+        <label for="name">Item Name : </label>
+        <input type="text" name="name" id="name" />
+
+        <label for="price">Price : </label>
+        <input type="number" name="price" id="price" />
+
+        <div class="buttons">
+            <button class="submit">Submit</button>
+            <button class="cancel">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<div class="main">
+    <fieldset>
+        <legend><%- title %></legend>
+        <% if(people.length == 0) { %>
+        <h1>No Records Found!</h1>
+        <% } else { %>
+        <div class="tab-group">
+            <% for(let person of people) {%>
+            <div class="tab" id="<%- person._id%>">
+                <div class="title">
+                    <h2><%- person.name %></h2>
+                    <div>
+                        :
+                        <span><%- person.total %> </span>
+                    </div>
+                </div>
+                <div class="content">
+                    <table>
+                        <tbody>
+                            <% for(let item of (person.pays || person.takes))
+                            {%>
+                            <tr id="<%- item._id %>">
+                                <td class="details name"><%- item.name %></td>
+                                <td class="details price"><%- item.price %></td>
+                                <td class="action">
+                                    <button class="editBtn">Edit</button>
+                                    <button class="deleteBtn">Delete</button>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="content">
-                <table>
-                    <tbody>
-                        <% for(let item of person.items) {%>
-                        <tr id="<%- item._id%>">
-                            <td class="details"><%- item.name %></td>
-                            <td class="details"><%- item.price %></td>
-                            <td class="action">
-                                <button>Edit</button>
-                                <button>Delete</button>
-                            </td>
-                        </tr>
-                        <% } %>
-                    </tbody>
-                </table>
-            </div>
+            <% } %>
         </div>
         <% } %>
-    </div>
-    <% } %>
-</fieldset>
+    </fieldset>
+</div>
 
-<script>
-    let content = Array.from(document.querySelectorAll(".content"));
-
-    let heights = content.map((cont) =>
-        parseFloat(window.getComputedStyle(cont).height)
-    );
-</script>
-<script src="../JS/animate.js"></script>
+<script src="../JS/details.js"></script>
+<script src="../JS/entryAnimate.js"></script>
+<script src="../JS/buttons.js"></script>

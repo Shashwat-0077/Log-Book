@@ -2,57 +2,82 @@
 
 <link rel="stylesheet" href="css/personInfo.css" />
 
-<fieldset>
-    <legend><%- name %></legend>
+<div class="edit-form">
+    <form action="" method="POST">
+        <label for="name">Item Name : </label>
+        <input type="text" name="name" id="name" />
 
-    <div class="pays">
-        <h1>Pay</h1>
-        <table class="content">
-            <% for(let item of pay.items) {%>
-            <tr id="<%- item._id%>">
-                <td class="details"><%- item.name %></td>
-                <td class="details"><%- item.price %></td>
-                <td class="action">
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </td>
-            </tr>
-            <% } %>
-        </table>
-        <hr />
-        <div class="total">
-            <p>Total</p>
-            <p>: <%- pay.total %></p>
+        <label for="price">Price : </label>
+        <input type="number" name="price" id="price" />
+
+        <div class="buttons">
+            <button class="submit">Submit</button>
+            <button class="cancel">Cancel</button>
         </div>
-    </div>
-    <div class="takes">
-        <h1>Take</h1>
-        <table class="content">
-            <% for(let item of take.items) {%>
-            <tr id="<%- item._id%>">
-                <td class="details"><%- item.name %></td>
-                <td class="details"><%- item.price %></td>
-                <td class="action">
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </td>
-            </tr>
-            <% } %>
-        </table>
-        <hr />
-        <div class="total">
-            <p>Total</p>
-            <p>: <%- take.total %></p>
+    </form>
+</div>
+
+<div class="main">
+    <fieldset>
+        <legend><%- person.name %></legend>
+
+        <div class="pays">
+            <h1>Pay</h1>
+            <table class="content" data-id="<%- person._Id %>" data-path="pays">
+                <% for(let item of person.pays) {%>
+                <tr id="<%- item._id%>">
+                    <td class="details name"><%- item.name %></td>
+                    <td class="details price"><%- item.price %></td>
+                    <td class="action">
+                        <button class="editBtn">Edit</button>
+                        <button class="deleteBtn">Delete</button>
+                    </td>
+                </tr>
+                <% } %>
+            </table>
+
+            <hr />
+
+            <div class="total">
+                <p>Total</p>
+                <p>: <%- person.payTotal %></p>
+            </div>
         </div>
-    </div>
 
-    <div class="grand-total">
-        <p>Grand Total (<%- pay.total > take.total ? 'Pay' : 'Take' %>)</p>
-        <p>
-            : <%- pay.total > take.total ? pay.total - take.total : take.total -
-            pay.total %>
-        </p>
-    </div>
-</fieldset>
+        <div class="takes">
+            <h1>Take</h1>
+            <table
+                class="content"
+                data-id="<%- person._id %>"
+                data-path="takes"
+            >
+                <% for(let item of person.takes) {%>
+                <tr id="<%- item._id%>">
+                    <td class="details name"><%- item.name %></td>
+                    <td class="details price"><%- item.price %></td>
+                    <td class="action">
+                        <button class="editBtn">Edit</button>
+                        <button class="deleteBtn">Delete</button>
+                    </td>
+                </tr>
+                <% } %>
+            </table>
+            <hr />
+            <div class="total">
+                <p>Total</p>
+                <p>: <%- person.takeTotal %></p>
+            </div>
+        </div>
 
+        <div class="grand-total">
+            <p><%- person.payTotal > person.takeTotal ? 'Pay' : 'Take' %></p>
+            <p>
+                : <%- person.payTotal > person.takeTotal ? person.payTotal -
+                person.takeTotal : person.takeTotal - person.payTotal %>
+            </p>
+        </div>
+    </fieldset>
+</div>
+
+<script src="/js/entryAnimate.js"></script>
 <script src="/js/personInfo.js"></script>
