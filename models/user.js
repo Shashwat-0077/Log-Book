@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const user = new mongoose.Schema({
-    username: String,
+    firstName: String,
+    LastName: String,
     people: [
         {
             type: mongoose.Schema.Types.ObjectId,

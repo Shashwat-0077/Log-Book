@@ -10,8 +10,13 @@ const User = require("./models/user");
 const Person = require("./models/person");
 const Item = require("./models/item");
 const detectError = require("./utils/detectError");
+const getCreds = require("./utils/getCreds");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
+const passLocal = require("passport-local");
 
-const USER_ID = "6339a327eb2d4e47efc9d67f";
+const USER_ID = "633b08589cf2295bd24f304c";
 
 mongoose
     .connect("mongodb://localhost:27017/logBook")
@@ -40,6 +45,31 @@ app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+const session_option = {
+    secret: "thisWasSupposedToBeaSecret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 3,
+        maxAge: 1000 * 60 * 60 * 24 * 3,
+    },
+};
+app.use(session(session_option));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new passLocal(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+});
+
 app.get(
     "/",
     detectError(async (req, res, next) => {
@@ -47,7 +77,7 @@ app.get(
 
         const people = user.people;
 
-        let names = people.map((person) => person.name);
+        const creds = await getCreds(USER_ID);
 
         let totalPay = 0;
         let totalTake = 0;
@@ -58,140 +88,137 @@ app.get(
         }
 
         res.render("home", {
-            credTotal: totalPay,
-            debtTotal: totalTake,
-            names: names,
+            totalPay: totalPay,
+            totalTake: totalTake,
+            creds: creds,
         });
     })
 );
 
 app.get(
-    "/person",
+    "/person/:personId",
     detectError(async (req, res, next) => {
-        let name = req.query.name;
+        let personId = req.params.personId;
 
-        let person;
-        try {
-            person = await User.aggregate([
-                {
-                    $match: {
-                        _id: mongoose.Types.ObjectId(USER_ID),
-                    },
-                },
-                {
-                    $lookup: {
-                        from: "people",
-                        localField: "people",
-                        foreignField: "_id",
-                        as: "people",
-                    },
-                },
-                {
-                    $project: {
-                        person: {
-                            $first: {
-                                $filter: {
-                                    input: "$people",
-                                    cond: { $eq: ["$$this.name", name] },
-                                },
-                            },
-                        },
-                    },
-                },
-                {
-                    $replaceRoot: {
-                        newRoot: "$person",
-                    },
-                },
-                {
-                    $lookup: {
-                        from: "items",
-                        localField: "pays",
-                        foreignField: "_id",
-                        as: "pays",
-                    },
-                },
-                {
-                    $lookup: {
-                        from: "items",
-                        localField: "takes",
-                        foreignField: "_id",
-                        as: "takes",
-                    },
-                },
-                {
-                    $unwind: "$pays",
-                },
-                {
-                    $sort: {
-                        "pays.price": 1,
-                    },
-                },
-                {
-                    $group: {
-                        _id: "$_id",
-                        name: {
-                            $first: "$name",
-                        },
-                        takes: {
-                            $first: "$takes",
-                        },
-                        payTotal: {
-                            $first: "$payTotal",
-                        },
-                        takeTotal: {
-                            $first: "$takeTotal",
-                        },
-                        pays: {
-                            $push: "$pays",
-                        },
-                    },
-                },
-                {
-                    $unwind: "$takes",
-                },
-                {
-                    $sort: {
-                        "takes.price": 1,
-                    },
-                },
-                {
-                    $group: {
-                        _id: "$_id",
-                        name: {
-                            $first: "$name",
-                        },
-                        pays: {
-                            $first: "$pays",
-                        },
-                        payTotal: {
-                            $first: "$payTotal",
-                        },
-                        takeTotal: {
-                            $first: "$takeTotal",
-                        },
-                        takes: {
-                            $push: "$takes",
-                        },
-                    },
-                },
-            ]);
-        } catch (err) {
-            if (err.name === "MongoServerError") {
-                let user = await User.findById(USER_ID, {
-                    people: 1,
-                }).populate("people");
+        if (!mongoose.Types.ObjectId.isValid(personId)) {
+            let creds = await getCreds(USER_ID);
+            return res.render("allNames", { creds: creds });
+        }
 
-                let names = user.people.map((person) => person.name);
+        let people = await User.aggregate([
+            {
+                $match: {
+                    _id: mongoose.Types.ObjectId(USER_ID),
+                },
+            },
+            {
+                $lookup: {
+                    from: "people",
+                    localField: "people",
+                    foreignField: "_id",
+                    as: "people",
+                },
+            },
+            {
+                $unwind: "$people",
+            },
+            {
+                $replaceRoot: {
+                    newRoot: "$people",
+                },
+            },
+            {
+                $match: {
+                    _id: mongoose.Types.ObjectId(personId),
+                },
+            },
+            {
+                $lookup: {
+                    from: "items",
+                    localField: "pays",
+                    foreignField: "_id",
+                    as: "pays",
+                },
+            },
+            {
+                $lookup: {
+                    from: "items",
+                    localField: "takes",
+                    foreignField: "_id",
+                    as: "takes",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$pays",
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                $sort: {
+                    "pays.price": 1,
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    name: {
+                        $first: "$name",
+                    },
+                    pays: {
+                        $push: "$pays",
+                    },
+                    takes: {
+                        $first: "$takes",
+                    },
+                    payTotal: {
+                        $first: "$payTotal",
+                    },
+                    takeTotal: {
+                        $first: "$takeTotal",
+                    },
+                },
+            },
+            {
+                $unwind: {
+                    path: "$takes",
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                $sort: {
+                    "takes.price": 1,
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    name: {
+                        $first: "$name",
+                    },
+                    pays: {
+                        $first: "$pays",
+                    },
+                    takes: {
+                        $push: "$takes",
+                    },
+                    payTotal: {
+                        $first: "$payTotal",
+                    },
+                    takeTotal: {
+                        $first: "$takeTotal",
+                    },
+                },
+            },
+        ]);
 
-                return res.render("allNames", { names, names });
-            } else {
-                next(err);
-            }
+        if (!people[0]) {
+            let creds = await getCreds(USER_ID);
+            return res.render("allNames", { creds: creds });
         }
 
         res.render("personInfo", {
-            person: person[0],
+            person: people[0],
         });
     })
 );
@@ -340,66 +367,6 @@ app.get(
     })
 );
 
-app.post(
-    "/:path/edit/:personId/:itemId",
-    detectError(async (req, res, next) => {
-        let { path, personId, itemId } = req.params;
-        let { name, price } = req.body;
-
-        let item = await Item.findById(itemId);
-
-        item.name = name;
-        item.price = price;
-        item.save();
-
-        let person;
-        if (path == "pays") {
-            person = await Creditor.findById(personId).populate("items");
-        } else if (path == "takes") {
-            person = await Debtor.findById(personId).populate("items");
-        }
-
-        person.total = 0;
-        for (let item of person.items) {
-            person.total += item.price;
-        }
-        person.save();
-
-        res.redirect(`/${path}`);
-    })
-);
-
-app.post(
-    "/person/:path/edit/:personId/:itemId",
-    detectError(async (req, res, next) => {
-        let { path, personId, itemId } = req.params;
-        let { name, price } = req.body;
-
-        let item = await Item.findById(itemId);
-
-        item.name = name;
-        item.price = price;
-        item.save();
-
-        let person;
-        if (path == "pays") {
-            person = await Creditor.findById(personId).populate("items");
-        } else if (path == "takes") {
-            console.log(personId);
-            person = await Debtor.findById(personId).populate("items");
-        }
-
-        console.log(path, person);
-
-        person.total = 0;
-        for (let item of person.items) {
-            person.total += item.price;
-        }
-        person.save();
-
-        res.redirect(`/person?name=${person.name}`);
-    })
-);
 app.all("*", (req, res, next) => {
     res.render("404");
 });

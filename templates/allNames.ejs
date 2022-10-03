@@ -3,12 +3,12 @@
 <link rel="stylesheet" href="/css/allNames.css" />
 
 <div class="main">
-    <h1>Cannot find that name!</h1>
+    <h1>No Result Found!</h1>
 
-    <% for(let name of names) { %>
+    <% for(let cred of creds) { %>
 
     <div class="row">
-        <p><%- name %></p>
+        <p id="<%- cred._id %>"><%- cred.name %></p>
         <i class="fa-solid fa-chevron-right"></i>
     </div>
     <% } %>

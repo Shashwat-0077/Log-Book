@@ -1,17 +1,17 @@
 <% layout('./layouts/boilerplate.ejs') %>
-<link rel="stylesheet" href="css/home.css" type="text/css" />
+<link rel="stylesheet" href="/css/home.css" type="text/css" />
 
 <main>
     <h1>
         My Balance <br />
         <span>
-            (<%- credTotal > debtTotal ? 'Pay' : 'Take' %> : <%- credTotal >
-            debtTotal ? credTotal - debtTotal : debtTotal - credTotal %>)
+            (<%- totalPay > totalTake ? 'Pay' : 'Take' %> : <%- totalPay >
+            totalTake ? totalPay - totalTake : totalTake - totalPay %>)
         </span>
     </h1>
     <section class="selection-menu">
-        <a href="/pays">Pays (Total : <%- credTotal %> )</a>
-        <a href="/takes">Takes (Total : <%- debtTotal %> )</a>
+        <a href="/pays">Pays (Total : <%- totalPay %> )</a>
+        <a href="/takes">Takes (Total : <%- totalTake %> )</a>
         <form action="/person" class="person" method="get" autocomplete="off">
             <input
                 type="text"
@@ -29,6 +29,18 @@
 </main>
 
 <script>
-    const names = "<%- names%>".split(",");
+    let person;
+    const people = [];
 </script>
+
+<% for(let cred of creds ) { %>
+<script>
+    person = {
+        name: "<%- cred.name%>",
+        id: "<%- cred._id%>",
+    };
+    people.push(person);
+</script>
+<% } %>
+
 <script src="/js/home.js"></script>

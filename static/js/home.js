@@ -8,27 +8,33 @@ nameInp.addEventListener("input", (e) => {
     let value = nameInp.value;
     if (nameInp.value === "") {
         suggestion.innerHTML = "";
+        suggestion.id = "";
         return;
     } else if (nameInp.value.match(/[-[\]{}()*+?.,\\^$|#\s]/g)) {
         suggestion.innerHTML = "";
+        suggestion.id = "";
         return;
     }
 
     let pos = NaN;
 
-    for (let i = 0; i < names.length; i++) {
+    for (let i = 0; i < people.length; i++) {
         let regex = RegExp("^" + value, "i");
 
-        if (regex.exec(names[i])) {
+        if (regex.exec(people[i].name)) {
             pos = i;
             break;
         }
     }
 
     if (pos || pos == 0) {
-        suggestion.innerHTML = `${value}${names[pos].substring(value.length)}`;
+        suggestion.innerHTML = `${value}${people[pos].name.substring(
+            value.length
+        )}`;
+        suggestion.id = people[pos].id;
     } else {
         suggestion.innerHTML = "";
+        suggestion.id = "";
     }
 });
 
@@ -36,5 +42,5 @@ nameInp.addEventListener("input", (e) => {
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    location.href = `/person?name=${suggestion.innerHTML.toLowerCase()}`;
+    location.href = `/person/${suggestion.id}`;
 });
