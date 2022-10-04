@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="/css/flash.css" />
+
+<% if(success && success.length) { %>
+<div class="flash" style="background-color: #d1e7dd">
+    <div><%- success %></div>
+    <button
+        onclick="document.querySelector('.flash.active').classList.remove('active')"
+    >
+        <i class="fa-solid fa-xmark fa-xl"></i>
+    </button>
+</div>
+<% } else if (error && error.length) { %>
+<div class="flash" style="background-color: #f8d7da">
+    <div><%- error %></div>
+    <button
+        onclick="document.querySelector('.flash.active').classList.remove('active')"
+    >
+        <i class="fa-solid fa-xmark fa-xl"></i>
+    </button>
+</div>
+<% } %> <% if((success && success.length) || (error && error.length)) {%>
+<script>
+    const flash = document.querySelector(".flash");
+    setTimeout(() => {
+        flash.classList.add("active");
+    }, 200);
+
+    setTimeout(() => {
+        flash.classList.remove("active");
+    }, 5000);
+</script>
+<% } %>

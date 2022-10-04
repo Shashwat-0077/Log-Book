@@ -1,77 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<% layout('./layouts/boilerplate.ejs') %>
 
-        <link rel="stylesheet" href="../static/css/root.css" />
-        <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="/css/auth.css" />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Lobster+Two:wght@400;700&display=swap"
-            rel="stylesheet"
-        />
-        <title>Document</title>
-    </head>
-    <body>
-        <div class="card">
-            <div class="inner-content">
-                <div class="front">
-                    <h1>Login</h1>
-                    <form action="">
-                        <input
-                            type="text"
-                            name="username"
-                            placeholder="Username"
-                        />
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                        />
-                    </form>
-                    <button
-                        onclick="document.querySelector('.card').classList.toggle('active')"
-                    >
-                        Sign Up
-                    </button>
-                </div>
-                <div class="back">
-                    <h1>Sign up</h1>
-                    <form action="">
-                        <div class="name">
-                            <input
-                                type="text"
-                                name="firstName"
-                                placeholder="First Name"
-                            />
-                            <input
-                                type="text"
-                                name="lastName"
-                                placeholder="Last Name"
-                            />
-                        </div>
-                        <input
-                            type="text"
-                            name="username"
-                            placeholder="Username"
-                        />
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                        />
-                    </form>
-                    <button
-                        onclick="document.querySelector('.card').classList.toggle('active')"
-                    >
-                        Log in
-                    </button>
-                </div>
+<div class="card">
+    <div class="inner-content">
+        <div class="front">
+            <h1>Login</h1>
+            <form action="/login" method="POST">
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    autocomplete="off"
+                />
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    autocomplete="off"
+                />
+                <button>Submit</button>
+            </form>
+
+            <div class="changeBtn">
+                <p>Don't have an account, Register Here...</p>
             </div>
         </div>
-    </body>
-</html>
+        <div class="back">
+            <h1>Register</h1>
+            <form action="/register" method="POST">
+                <div class="name">
+                    <input
+                        type="text"
+                        name="firstName"
+                        placeholder="First Name"
+                    />
+                    <input
+                        type="text"
+                        name="lastName"
+                        placeholder="Last Name"
+                    />
+                </div>
+                <input type="text" name="username" placeholder="Username" />
+                <input type="password" name="password" placeholder="Password" />
+                <button>Submit</button>
+            </form>
+            <div class="changeBtn">
+                <p>log in Instead...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Array.from(document.querySelectorAll(".changeBtn")).forEach((btn) => {
+        btn.addEventListener("click", () => {
+            document.querySelector(".card").classList.toggle("active");
+        });
+    });
+</script>

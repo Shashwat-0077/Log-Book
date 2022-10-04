@@ -3,14 +3,15 @@
 <link rel="stylesheet" href="/css/allNames.css" />
 
 <div class="main">
+    <% if(creds.length) { %>
     <h1>No Result Found!</h1>
-
     <% for(let cred of creds) { %>
-
     <div class="row">
         <p id="<%- cred._id %>"><%- cred.name %></p>
         <i class="fa-solid fa-chevron-right"></i>
     </div>
+    <% } %> <% } else { %>
+    <h1>No Records Found!</h1>
     <% } %>
 </div>
 

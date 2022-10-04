@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+const passLocalMongo = require("passport-local-mongoose");
 
 const user = new mongoose.Schema({
     firstName: String,
-    LastName: String,
+    lastName: String,
     people: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -10,6 +11,8 @@ const user = new mongoose.Schema({
         },
     ],
 });
+
+user.plugin(passLocalMongo);
 
 const User = mongoose.model("User", user);
 

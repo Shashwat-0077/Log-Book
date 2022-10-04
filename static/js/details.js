@@ -1,7 +1,7 @@
 const tabs = Array.from(document.querySelectorAll(".tab"));
 const contents = Array.from(document.querySelectorAll(".content"));
 const heights = contents.map(
-    (cont) => parseFloat(window.getComputedStyle(cont).height) + 30
+    (cont) => parseFloat(window.getComputedStyle(cont).height) + 40
 );
 
 function minimizeContent() {

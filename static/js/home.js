@@ -8,11 +8,11 @@ nameInp.addEventListener("input", (e) => {
     let value = nameInp.value;
     if (nameInp.value === "") {
         suggestion.innerHTML = "";
-        suggestion.id = "";
+        suggestion.id = "null";
         return;
     } else if (nameInp.value.match(/[-[\]{}()*+?.,\\^$|#\s]/g)) {
         suggestion.innerHTML = "";
-        suggestion.id = "";
+        suggestion.id = "null";
         return;
     }
 
@@ -34,7 +34,7 @@ nameInp.addEventListener("input", (e) => {
         suggestion.id = people[pos].id;
     } else {
         suggestion.innerHTML = "";
-        suggestion.id = "";
+        suggestion.id = "null";
     }
 });
 

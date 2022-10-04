@@ -36,10 +36,7 @@ editBtn.forEach((button) => {
         itemName.value = parentRow.querySelector(".name").innerHTML;
         price.value = parentRow.querySelector(".price").innerHTML;
 
-        form.setAttribute(
-            "action",
-            `${location.href}/edit/${parent.id}/${parentRow.id}`
-        );
+        form.setAttribute("action", `/edit/${parent.id}/${parentRow.id}`);
 
         event.stopPropagation();
     });

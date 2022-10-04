@@ -15,8 +15,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const passLocal = require("passport-local");
-
-const USER_ID = "633b08589cf2295bd24f304c";
+const { isLoggedIn } = require("./middleware/isLoggedIn");
 
 mongoose
     .connect("mongodb://localhost:27017/logBook")
@@ -68,16 +67,81 @@ app.use(flash());
 
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
+
+    next();
+});
+
+app.get("/", (req, res, next) => {
+    res.render("auth");
+});
+
+app.post(
+    "/login",
+    passport.authenticate("local", {
+        failureFlash: true,
+        failureRedirect: "/",
+    }),
+    (req, res, next) => {
+        req.flash("success", "Welcome Back");
+        res.redirect("/home");
+    }
+);
+
+app.post(
+    "/register",
+    detectError(async (req, res, next) => {
+        try {
+            const { username, firstName, lastName, password } = req.body;
+
+            const newUser = User({
+                username: username,
+                firstName: firstName,
+                lastName: lastName,
+            });
+
+            const registerUser = await User.register(newUser, password);
+
+            req.login(registerUser, (err) => {
+                if (err) {
+                    req.flash("error", err.message);
+                    return res.redirect("/register");
+                }
+                req.flash("success", "Welcome to the LogBook");
+                res.redirect("/home");
+            });
+        } catch (e) {
+            req.flash("error", e.message);
+            res.redirect("/");
+        }
+    })
+);
+
+app.all("/logout", (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            req.flash(
+                "error",
+                "please try again , if nothing happens please try to contact us via example@gmail.com"
+            );
+        } else {
+            req.flash("success", "GoodBye ! see you again soon");
+            return res.redirect("/");
+        }
+        res.redirect("/home");
+    });
 });
 
 app.get(
-    "/",
+    "/home",
+    isLoggedIn,
     detectError(async (req, res, next) => {
-        const user = await User.findById(USER_ID).populate("people");
+        const user = await User.findById(req.user._id).populate("people");
 
         const people = user.people;
 
-        const creds = await getCreds(USER_ID);
+        const creds = await getCreds(req.user._id);
 
         let totalPay = 0;
         let totalTake = 0;
@@ -97,18 +161,21 @@ app.get(
 
 app.get(
     "/person/:personId",
+    isLoggedIn,
     detectError(async (req, res, next) => {
+        req.session.redirectAfterEditOrDelete = req.originalUrl;
+
         let personId = req.params.personId;
 
         if (!mongoose.Types.ObjectId.isValid(personId)) {
-            let creds = await getCreds(USER_ID);
+            let creds = await getCreds(req.user._id);
             return res.render("allNames", { creds: creds });
         }
 
         let people = await User.aggregate([
             {
                 $match: {
-                    _id: mongoose.Types.ObjectId(USER_ID),
+                    _id: mongoose.Types.ObjectId(req.user._id),
                 },
             },
             {
@@ -213,7 +280,7 @@ app.get(
         ]);
 
         if (!people[0]) {
-            let creds = await getCreds(USER_ID);
+            let creds = await getCreds(req.user._id);
             return res.render("allNames", { creds: creds });
         }
 
@@ -225,10 +292,13 @@ app.get(
 
 app.get(
     "/pays",
+    isLoggedIn,
     detectError(async (req, res, next) => {
+        req.session.redirectAfterEditOrDelete = req.originalUrl;
+
         const people = await User.aggregate([
             {
-                $match: { _id: mongoose.Types.ObjectId(USER_ID) },
+                $match: { _id: mongoose.Types.ObjectId(req.user._id) },
             },
             {
                 $lookup: {
@@ -297,10 +367,13 @@ app.get(
 
 app.get(
     "/takes",
+    isLoggedIn,
     detectError(async (req, res, next) => {
+        req.session.redirectAfterEditOrDelete = req.originalUrl;
+
         const people = await User.aggregate([
             {
-                $match: { _id: mongoose.Types.ObjectId(USER_ID) },
+                $match: { _id: mongoose.Types.ObjectId(req.user._id) },
             },
             {
                 $lookup: {
@@ -366,6 +439,18 @@ app.get(
         res.render("details", { people: people, title: "Takes" });
     })
 );
+
+app.get("/edit/:personId/:itemId", isLoggedIn, (req, res, next) => {
+    const { personId, itemId } = req.params;
+    const { name, price } = req.body;
+
+    let item = Item.findById(itemId);
+    let person = Person.findById(personId);
+
+    person;
+
+    res.redirect(req.session.redirectAfterEditOrDelete || "/home");
+});
 
 app.all("*", (req, res, next) => {
     res.render("404");
