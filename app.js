@@ -41,8 +41,6 @@ app.use(express.static(path.join(__dirname, "static")));
 
 app.use(favicon(path.join(__dirname, "static/images/favicon.ico")));
 
-app.use(morgan("dev"));
-
 app.use(methodOverride("_method"));
 
 app.use(express.urlencoded({ extended: true }));
