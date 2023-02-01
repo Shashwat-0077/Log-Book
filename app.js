@@ -18,7 +18,11 @@ const passLocal = require("passport-local");
 const { isLoggedIn } = require("./middleware/isLoggedIn");
 
 mongoose
-    .connect("mongodb://localhost:27017/logBook")
+    .connect("mongodb://localhost:27017/logBook", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        family: 4,
+    })
     .then(() => {
         console.log("DB is connected");
     })
